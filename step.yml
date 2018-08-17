@@ -72,7 +72,6 @@ inputs:
         This will be used to generate URLs for tickets that match those included in the changes for this build.
       is_expand: true
       is_required: false
-      value_options: []
   - NIGHTLY_BUILD_TAG_FORMAT: 
     opts:
       title: "Nightly Build Tag Format"
@@ -81,7 +80,6 @@ inputs:
         This step will use these tags to identify changes between nightly builds.  It will use this tag format plus the current date to keep track of this.
       is_expand: true
       is_required: true
-      value_options: []
 
 outputs:
   - RELEASE_NOTES_PATH:
