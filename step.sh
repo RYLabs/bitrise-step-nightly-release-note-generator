@@ -1,6 +1,6 @@
 #!/bin/bash
-set -x
 
+RED='\033[0;31m'
 GREEN='\033[0;32m'
 NC='\033[0m'
 
@@ -12,13 +12,13 @@ LATEST_NIGHTLY_TAG=${CURRENT_NIGHTLY_TAGS[0]}
 
 date=$(date '+%m-%d-%Y')
 
-[[ -z "$LATEST_NIGHTLY_TAG" ]] && { git tag "$nightly_build_tag_format-$date" && echo "No nightly tags found. Exiting" >&2; exit 1; }
+[[ -z "$LATEST_NIGHTLY_TAG" ]] && { git tag "$nightly_build_tag_format-$date" && echo "${RED}No nightly tags found. Exiting${NC}" >&2; exit 1; }
 
 echo "Latest nightly tag found: $LATEST_NIGHTLY_TAG" >&1
 
 RAW_MERGE_LOG=$(git log $LATEST_NIGHTLY_TAG..HEAD --merges)
 
-[[ -z "$RAW_MERGE_LOG" ]] && { echo "No changes detected from last nightly build. Exiting" >&2; exit 1; }
+[[ -z "$RAW_MERGE_LOG" ]] && { echo "${RED}No changes detected from last nightly build. Exiting${NC}" >&2; exit 1; }
 
 JIRA_TICKETS_ADDRESSED=$(echo $RAW_MERGE_LOG | grep -o '[A-Z][A-Z0-9]\+-[0-9]\+' | awk '!a[$0]++' )
 
