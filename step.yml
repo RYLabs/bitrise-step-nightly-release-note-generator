@@ -66,23 +66,16 @@ toolkit:
 inputs:
   - project_folder: "$BITRISE_SOURCE_DIR"
     opts:
-      title: "Project Path"
-      summary: Root of project to generate Release Notes from.
+      title: "Directory where project was cloned"
       is_required: true
-  - jira_project_url:
+      is_dont_change_value: true
+  - jira_project_url: ""
     opts:
       title: "Jira Project URL (e.g. example.atlassian.net)"
-      summary: JIRA based project url
-      description: |
-        This will be used to generate URLs for tickets that match those included in the changes for this build.
-      is_expand: true
       is_required: false
   - nightly_build_tag_format: "nightly" 
     opts:
       title: "Nightly Build Tag Format"
-      summary: Format to use for tags that will be used to identify nightly builds.
-      description: |
-        This step will use these tags to identify changes between nightly builds.  It will use this tag format plus the current date to keep track of this.
       is_required: true
 
 outputs:
