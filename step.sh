@@ -1,4 +1,5 @@
 #!/bin/bash
+set -x
 
 RED='\033[0;31m'
 GREEN='\033[0;32m'
@@ -12,13 +13,13 @@ LATEST_NIGHTLY_TAG=${CURRENT_NIGHTLY_TAGS[0]}
 
 date=$(date '+%m-%d-%Y')
 
-[[ -z "$LATEST_NIGHTLY_TAG" ]] && { git tag "$nightly_build_tag_format-$date" && echo "${RED}No nightly tags found. Exiting${NC}" >&2; exit 1; }
+[[ -z "$LATEST_NIGHTLY_TAG" ]] && { git tag "$nightly_build_tag_format-$date" && git push origin "$nightly_build_tag_format-$date" && echo -e "${RED}No nightly tags found. Exiting${NC}" >&1; exit 1; }
 
 echo "Latest nightly tag found: $LATEST_NIGHTLY_TAG" >&1
 
 RAW_MERGE_LOG=$(git log $LATEST_NIGHTLY_TAG..HEAD --merges)
 
-[[ -z "$RAW_MERGE_LOG" ]] && { echo "${RED}No changes detected from last nightly build. Exiting${NC}" >&2; exit 1; }
+[[ -z "$RAW_MERGE_LOG" ]] && { echo -e "${RED}No changes detected from last nightly build. Exiting${NC}" >&1; exit 1; }
 
 JIRA_TICKETS_ADDRESSED=$(echo $RAW_MERGE_LOG | grep -o '[A-Z][A-Z0-9]\+-[0-9]\+' | awk '!a[$0]++' )
 
@@ -42,6 +43,7 @@ git tag -d $LATEST_NIGHTLY_TAG
 
 echo -e "Writing new nightly tag." >&1
 git tag "$nightly_build_tag_format-$date"
+git push origin "$nightly_build_tag_format-$date"
 
 echo -e "${GREEN}Exporting release_notes.md.${NC}" >&1
 envman add --key RELEASE_NOTES_PATH --value '$project_folder/release_notes.md'
