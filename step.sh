@@ -7,9 +7,9 @@ NC='\033[0m'
 
 cd $project_folder
 
-LATEST_NIGHTLY_TAG=$( git tag -l --sort=committerdate | grep $nightly_build_tag_format | head -n -1 )
+git fetch --tags
 
-echo "$(git tag -l --sort=-committerdate)"
+LATEST_NIGHTLY_TAG=$( git ls-remote --tags | grep $nightly_build_tag_format | head -n 1 )
 
 date=$(date '+%m-%d-%Y')
 
