@@ -8,7 +8,7 @@ cd $project_folder
 
 git fetch --tags
 
-LATEST_NIGHTLY_TAG=$( git ls-remote --tags | grep $nightly_build_tag_format | head -n 1 )
+LATEST_NIGHTLY_TAG=$( git tag -l --sort=-committerdate | grep $nightly_build_tag_format | head -n 1 )
 
 date=$(date '+%m-%d-%Y')
 
@@ -39,13 +39,14 @@ EOF
 
 echo -e "Removing previous nightly tag." >&1
 git tag -d $LATEST_NIGHTLY_TAG
+git push --delete origin $LATEST_NIGHTLY_TAG
 
 echo -e "Writing new nightly tag." >&1
 git tag "$nightly_build_tag_format-$date"
 git push origin "$nightly_build_tag_format-$date"
 
 echo -e "${GREEN}Exporting release_notes.md.${NC}" >&1
-envman add --key RELEASE_NOTES_PATH --value '$project_folder/release_notes.md'
+envman add --key RELEASE_NOTES_PATH --value "$project_folder/release_notes.md"
 
 echo -e "${GREEN}Adding release_notes.md to artifacts.${NC}" >&1
-cp  '$project_folder/release_notes.md' '$BITRISE_DEPLOY_DIR/release_notes.md'
+cp  "release_notes.md" "$BITRISE_DEPLOY_DIR/release_notes.md"
