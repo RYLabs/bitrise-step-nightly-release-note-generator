@@ -1,5 +1,4 @@
 #!/bin/bash
-set -x
 
 RED='\033[0;31m'
 GREEN='\033[0;32m'
@@ -47,3 +46,6 @@ git push origin "$nightly_build_tag_format-$date"
 
 echo -e "${GREEN}Exporting release_notes.md.${NC}" >&1
 envman add --key RELEASE_NOTES_PATH --value '$project_folder/release_notes.md'
+
+echo -e "${GREEN}Adding release_notes.md to artifacts.${NC}" >&1
+cp  '$project_folder/release_notes.md' '$BITRISE_DEPLOY_DIR/release_notes.md'
